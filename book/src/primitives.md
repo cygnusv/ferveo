@@ -29,7 +29,7 @@ Let \\(\operatorname{H}_{\ell}: \{0,1\}^* \rightarrow \{0,1\}^\ell\\) be a hash 
 
 ## Symmetric Cryptography
 
-The authenticated encryption and decryption operations with key $k$, ciphertext $C$, and plaintext $M$ are denoted:
+The authenticated encryption and decryption operations with key \\(k\\), ciphertext \\(C\\), and plaintext \\(M\\) are denoted:
 
 \\[C = \operatorname{encrypt}(k, M)\\]
 \\[M = \operatorname{decrypt}(k, C)\\]

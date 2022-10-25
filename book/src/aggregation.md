@@ -15,7 +15,7 @@ For each ciphertext \\(j\\) compute the scalar coefficient:
 
 which can be used to compute the aggregated decryption share for validator \\(i\\):
 
-\\[\hat{D}_i = \sum_j \rho_j D_{i,j} \\]
+\\[\hat{D}\_i = \sum_j \rho_j D_{i,j} \\]
 
 
 ## To verify the correctness of an aggregation against aggregated ciphertexts
@@ -26,7 +26,7 @@ Given many valid ciphertexts \\((U_j,W_j)\\) and an aggregated decryption share 
 
 and checking the pairing equation:
 
-\\[ \prod_i e(\sum_{j} [\rho_i] \hat{D}_{i}, P_i) = e([\sum_{i,j} \rho_i] U_j, H) \\]
+\\[ \prod_i e(\sum_{j} [\rho_i] \hat{D}\_{i}, P_i) = e([\sum_{i,j} \rho_i] U_j, H) \\]
 
 ## Proof sketch 
 

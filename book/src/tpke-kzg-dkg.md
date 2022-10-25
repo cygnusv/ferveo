@@ -15,11 +15,11 @@ In the protocol, \\(U\\) is on \\(G_1\\), pubkeys \\(Y\\) are on \\(G_1\\), and 
 \\(Enc(m, AD):\\)
 
 1. Let \\(r\\) be a random scalar
-2. Let \((U = rP_1\\)
+2. Let \\(U = rP_1\\)
 3. Let \\(V = G(rY) \oplus m\\)
-4. Let \\(W = rH(U, V, AD)\))
+4. Let \\(W = rH(U, V, AD)\\)
 
-The public key portion of the ciphertext is \(((U, W)\\) and \\(V\\) is the ciphertext.
+The public key portion of the ciphertext is \\((U, W)\\) and \\(V\\) is the ciphertext.
 
 ## Calculate Decryption Share
 

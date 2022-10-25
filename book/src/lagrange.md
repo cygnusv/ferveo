@@ -1,6 +1,6 @@
 # Lagrange Interpolation
 
-In the threshold decryption procedure, many \\(\mathbb_{G}_2 \\) points must be multiplied by Lagrange coefficients \\(\mathcal{L}^T_{i} (0)\\) before being summed, to interpolate the shared secret committed inside the \\(\mathbb_{G}_2\\) points, where \\(T\\) is the sufficiently large threshold subset of evaluation points.
+In the threshold decryption procedure, many \\(\mathbb{G}\_2\\) points must be multiplied by Lagrange coefficients \\(\mathcal{L}^T_{i} (0)\\) before being summed, to interpolate the shared secret committed inside the \\(\mathbb{G}_2\\) points, where \\(T\\) is the sufficiently large threshold subset of evaluation points.
 
 To compute this value \\(\mathcal{L}^T_{i} (0)\\), note the equality:
 

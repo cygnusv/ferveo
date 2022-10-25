@@ -132,7 +132,7 @@ For each ciphertext \\(j\\) compute the scalar coefficient:
 
 which can be used to compute the aggregated decryption share for validator \\(i\\):
 
-\\[\hat{D}_i = \sum_j \rho_j D_{i,j} \\]
+\\[\hat{D}\_i = \sum_j \rho_j D_{i,j} \\]
 
 
 ## `TPKE.VerifyAggregatedDecryptionShares({U_j}, {\hat{D}_i}) -> bool`
@@ -142,11 +142,11 @@ Given many valid ciphertexts \\((U_j,W_j)\\) and an aggregated decryption share 
 
 and checking the pairing equation:
 
-\\[ \prod_i e(\sum_{j} [\rho_i] \hat{D}_{i}, P_i) = e([\sum_{i,j} \rho_i] U_j, H) \\]
+\\[ \prod_i e(\sum_{j} [\rho_i] \hat{D}\_{i}, P_i) = e([\sum_{i,j} \rho_i] U_j, H) \\]
 
 ## `TPKE.CombineDecryptionShares( {U_j}, {D_{i,j}) -> {S_j}`
 
-For a given ciphertext \\((U_j,W_j)\\), on input 2/3 weight of valid decryption shares \\(\{D_{i,j}\}\\) as checked by ``TPKE.VerifyDecryptionShares`, corresponding to validator set \\(\{i\}\\).
+For a given ciphertext \\((U_j,W_j)\\), on input 2/3 weight of valid decryption shares \\(\{D_{i,j}\}\\) as checked by `TPKE.VerifyDecryptionShares`, corresponding to validator set \\(\{i\}\\).
 
 Then a partial combined share \\(S_{i,j}\\) for that ciphertext can be computed with one pairing:
 
@@ -161,7 +161,7 @@ Total cost:
 
 Verifying \\(\prod_j S_j\\) for many ciphertexts with the same decrypting validator set can be done faster than generating each \\(S_j\\) separately. For ciphertexts \\((U_j, W_j)\\) with valid aggregated decryption shares \\( \hat{D}_{i}\\) (checked by `TPKE.VerifyAggregatedDecryptionShares`), combined shares \\(\{S_j\}\\) and random scalars \\(\rho_j\\), for each validator \\(i\\), an aggregated decryption share: 
 
-\\[\hat{D}_i = \sum_j \rho_j D_{i,j} \\]
+\\[\hat{D}\_i = \sum_j \rho_j D_{i,j} \\]
 
 computed using unknown \\(D_{i,j}\\) but with the publicly known coefficients:
 
@@ -169,7 +169,7 @@ computed using unknown \\(D_{i,j}\\) but with the publicly known coefficients:
 
 can be used to compute an aggregated partial combined share \\(\hat{S}_i \\):
 
-\\[ \hat{S}_i = e( \hat{D}_i, [\sum_{\omega_j \in \Omega_i} \lambda_{\omega_j}(0)] Z_{i,\omega_j}  ) \\]
+\\[ \hat{S}\_i = e( \hat{D}\_i, [\sum_{\omega_j \in \Omega_i} \lambda_{\omega_j}(0)] Z_{i,\omega_j}  ) \\]
 
 and combined to get an aggregated final combined share \\( \hat{S} = \prod_i \hat{S}_i\\) which can be checked against the computed \\(\{S_j\}\\) by: 
 
@@ -181,4 +181,4 @@ Total cost:
 
 ## `TPKE.DeriveSymmetricKey(S_j) -> k_j`
 
-Use HKDF(S_j)
+Use \\(HKDF(S_j)\\)
