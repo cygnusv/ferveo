@@ -307,6 +307,78 @@ impl<E: Pairing> UpdateTranscript<E> {
     }
 }
 
+// HandoverTranscript, a.k.a. "The Baton", represents the message an incoming
+// node produces to initiate a handover with an outgoing node.
+// After the handover, the incoming node replaces the outgoing node in an
+// existing cohort, securely obtaining a new blinded key share, but under the
+// incoming node's private key.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct HandoverTranscript<E: Pairing> {
+    pub double_blind_share: E::G2,
+    pub commitment_to_share: E::G2,
+    pub commitment_to_g1: E::G1,
+    pub commitment_to_g2: E::G2,
+    pub incoming_pubkey: E::G2Affine,
+    pub outgoing_pubkey: E::G2Affine,
+}
+
+impl<E: Pairing> HandoverTranscript<E> {
+    pub fn new(
+        outgoing_blinded_share: &BlindedKeyShare<E>,
+        outgoing_pubkey: E::G2Affine,
+        incoming_validator_keypair: &Keypair<E>,
+        rng: &mut impl RngCore,
+    ) -> Self {
+        let random_scalar = E::ScalarField::rand(rng);
+        let incoming_decryption_key = incoming_validator_keypair.decryption_key;
+        let double_blind_share = outgoing_blinded_share
+            .blinded_key_share
+            .mul(incoming_decryption_key);
+        let commitment_to_share = outgoing_pubkey
+            .mul(incoming_validator_keypair.decryption_key.mul(random_scalar));
+
+        Self {
+            double_blind_share,
+            commitment_to_share,
+            commitment_to_g1: E::G1::generator().mul(random_scalar),
+            commitment_to_g2: E::G2::generator().mul(random_scalar),
+            incoming_pubkey: incoming_validator_keypair
+                .public_key()
+                .encryption_key,
+            outgoing_pubkey,
+        }
+    }
+
+    // See similarity with transcript check #4 (do_verify_full in pvss)
+    pub fn validate(&self, share_commitment_a_i: E::G1) -> Result<bool> {
+        // e(comm_G1, double_blind_share) == e(A_i, comm_share)
+        //   or equivalently:
+        // e(-comm_G1, double_blind_share) · e(A_i, comm_share) == 1
+        let commitment_to_g1_inv = -self.commitment_to_g1;
+        let mut is_valid = E::multi_pairing(
+            [commitment_to_g1_inv, share_commitment_a_i],
+            [self.double_blind_share, self.commitment_to_share],
+        )
+        .0 == E::TargetField::one();
+
+        // e(comm_G1, gen_G2) == e(gen_G1, comm_G2)
+        //   or equivalently:
+        // e(-comm_G1, gen_G2) · e(gen_G1, comm_G2) == 1
+        is_valid = is_valid
+            && E::multi_pairing(
+                [commitment_to_g1_inv, E::G1::generator()],
+                [E::G2::generator(), self.commitment_to_g2],
+            )
+            .0 == E::TargetField::one();
+
+        if is_valid {
+            Ok(true)
+        } else {
+            Err(Error::InvalidShareUpdate) // TODO: review error
+        }
+    }
+}
+
 /// Prepare share updates with a given root (0 for refresh, some x coord for recovery)
 /// This is a helper function for `ShareUpdate::create_share_updates_for_recovery` and `ShareUpdate::create_share_updates_for_refresh`
 /// It generates a new random polynomial with a defined root and evaluates it at each of the participants' indices.
